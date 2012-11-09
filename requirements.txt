@@ -5,4 +5,5 @@ Werkzeug==0.8.3
 gevent==0.13.8
 greenlet==0.4.0
 gunicorn==0.15.0
+python-binary-memcached==0.14
 wsgiref==0.1.2
