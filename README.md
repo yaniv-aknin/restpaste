@@ -1,8 +1,8 @@
 # restpaste
 
-A trivial app to sorta-RESTfully CRUD a shared key:value space with no backing store.
+A trivial app to sorta-RESTfully CRUD a shared key:value space with an ephemeral backing store.
 
-No authentication, no backing store, no bullshit. No guarentee of any kind, your data can and will expire rather rapidly, so use at your own bloody risk.
+No authentication, no real backing store, no bullshit. No guarentee of any kind, your data can and will expire rather rapidly, so use at your own bloody risk.
 
 ## Quick and dirty usage
 
@@ -16,9 +16,9 @@ No authentication, no backing store, no bullshit. No guarentee of any kind, your
 
     $ pip install httpie
     ...
-    $ echo 'Hello, world!' | http PUT --body restpaste.aknin.name/mykey
+    $ echo 'Hello, world!' | http PUT restpaste.aknin.name/mykey
     Hello, world!
-    $ http get --body restpaste.aknin.name/mykey
+    $ http get restpaste.aknin.name/mykey
     Hello, world!
     $ 
 
