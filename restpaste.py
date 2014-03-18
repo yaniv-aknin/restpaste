@@ -15,6 +15,9 @@ app = Flask(__name__)
 
 @app.before_request
 def initialize_cache():
+    if 'TESTING_CACHE' in app.config:
+        g.cache = app.config['TESTING_CACHE']
+        return
     url = URLObject(os.environ['REDISCLOUD_URL'])
     g.cache = RedisCache(
         host = url.hostname,
@@ -24,16 +27,17 @@ def initialize_cache():
 
 with open('README.md') as handle:
     PLAIN_INDEX=handle.read()
-MARKDOWN_INDEX=markdown(PLAIN_INDEX)
+MINIMAL_HTML_FMT = ("<!doctype html><html lang=en><head><meta charset=utf-8>"
+                    "<title>restpaste</title></head><body>%s</body></html>")
+MARKDOWN_INDEX=MINIMAL_HTML_FMT % markdown(PLAIN_INDEX)
 
 PLAIN=(('Content-Type', 'text/plain'),)
 OCTET_STREAM=(('Content-Type', 'application/octet-stream'),)
 
-@app.route('/')
+@app.route('/', methods={'GET', 'DELETE'})
 def index():
-    if request.method.lower() == 'DELETE':
+    if request.method.upper() == 'DELETE':
         g.cache.clear()
-        return '', NO_CONTENT
     if 'html' in request.headers.get('Accept', '*/*'):
         return MARKDOWN_INDEX, OK
     return PLAIN_INDEX, OK, PLAIN
